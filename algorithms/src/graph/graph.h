@@ -32,6 +32,21 @@ public:
 		return this->vertexSize;
 	}
 	
+	/* Returns edge list for the vertex passed */
+	vector<pair<int,int> > getEdgeListForVertex( const int vertex){
+		return g[vertex];
+	}
+	
+	/* Returns weight of the edge passed */
+	int getWeight( const int head, const int tail){
+		vector<pair<int,int> > edgeList = getEdgeListForVertex(head);
+		for( int i=0; i< (int)edgeList.size(); i++){
+			if(edgeList[i].first == tail)
+				return edgeList[i].second;
+		}
+		return 0;
+	}
+	
 	void addEdge( const int source, const int destination, const int weight){
 		assert( (source <= this->vertexSize) && (destination <= this->vertexSize) );
 		g[source].push_back(make_pair(destination,weight));
