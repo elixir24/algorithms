@@ -28,6 +28,9 @@ public:
 		this->g.resize(vertexSize+1);
 	}
 
+	int getSize(){
+		return this->vertexSize;
+	}
 	
 	void addEdge( const int source, const int destination, const int weight){
 		assert( (source <= this->vertexSize) && (destination <= this->vertexSize) );
