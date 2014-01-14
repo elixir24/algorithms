@@ -1,48 +1,70 @@
-#include<string>
-#include<vector>
+#include <map>
+#include <string>
 
-using namespace std;
+class trienode{
+    public:
+        bool isword;
+        std::map<char, trienode*> m;
+    
+    trienode(){
+        this->isword = false;
+    }
 
-class trie{
-public:
-  vector<trie*> v;
-	bool doesEnd;
-	string alphabet;
-	//Constructor
-	trie(string alphabet){
-		this->alphabet = alphabet;
-		this->doesEnd = false;
-		int alphSize = (int) alphabet.size();
-		v.resize(alphSize);
-		for( int i=0; i<alphSize; i++){
-			v[i] = NULL;
-		}
-	}
+    void insert_key(std::string key){
+        if ( key.length() == 0){
+            this->isword = true;
+            return;
+        }
 
-	/* Method to add a word to the trie*/
-	void addWord(const string s){
-		if(s.length() == 0){
-			this->doesEnd = true;
-			return;
-		}		
-		int c = s[0];
-		if(this->v[c-alphabet[0]] == NULL) { 
-			this->v[c-alphabet[0]] = new trie(this->alphabet);
-		}
-		this->v[c-alphabet[0]]->addWord(s.substr(1));
-	}
+        if( this->m.find(key[0]) == this->m.end())
+            this->m[key[0]] = new trienode();
+            this->m[key[0]]->insert_key(key.substr(1, key.length()-1));
+    }
 
-	/* Method to find if the sting is present in the trie or not*/
-	bool isPresent(const string s){
-		if( s.length() == 0) //base case
-			return this->doesEnd;
+    bool search_key(std::string key){
+        if(key.length() == 0){
+            return this->isword;
+        }
+        if( this->m.find(key[0]) == this->m.end()){
+            return false;
+        }else{
+            return this->m[key[0]]->search_key(key.substr(1, key.length()-1));
+        }
+    }
 
-		char c = s[0];
-		if( this->v[c- alphabet[0]] == NULL)
-			return false;
-		else{
-			return this->v[c-alphabet[0]]->isPresent(s.substr(1));
-		}
-	}
+    int delete_key(std::string key){
+        if (key.length() == 0){
+            if(false == this->isword)
+                return -1;
+            this->isword = false;
+            if( 0 == this->m.size()){
+                return 1; //means delete this node
+            }
+            else
+                return 0;
+        }
+
+        if( this->m.find(key[0]) == this->m.end()){
+            return -1;
+        }
+
+        int result = this->m[key[0]]->delete_key(key.substr(1, key.length()-1));
+        if(result == 1){
+            delete this->m[key[0]];
+            this->m.erase(key[0]);
+            if(!this->isword && this->m.size() == 0){
+                //pass
+            }else{
+                result = 0;
+            }
+        }
+        return result;
+    }
 
 };
+
+
+
+
+
+
