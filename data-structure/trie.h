@@ -1,3 +1,4 @@
+//@author - piyush
 #include <map>
 #include <string>
 
@@ -9,7 +10,7 @@ class trienode{
     trienode(){
         this->isword = false;
     }
-
+    /*Add a string key*/
     void insert_key(std::string key){
         if ( key.length() == 0){
             this->isword = true;
@@ -20,7 +21,8 @@ class trienode{
             this->m[key[0]] = new trienode();
             this->m[key[0]]->insert_key(key.substr(1, key.length()-1));
     }
-
+    
+    /*Search for a string key*/
     bool search_key(std::string key){
         if(key.length() == 0){
             return this->isword;
@@ -32,6 +34,13 @@ class trienode{
         }
     }
 
+    /*Delete a string key
+      Returns - 
+      -1 - Key not present, did nothing
+       0 - Key deleted, but trie not empty
+       1 - Key deleted, trie empty
+    */
+    
     int delete_key(std::string key){
         if (key.length() == 0){
             if(false == this->isword)
