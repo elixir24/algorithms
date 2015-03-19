@@ -58,5 +58,11 @@ int main(){
     v.push_back(makeInterval(4,13));
     v.push_back(makeInterval(13,15));
     printInterval(v);
-    printInterval(mergeInterval(v));
+    vector<interval*> merged = mergeInterval(v);
+    printInterval(merged);
+    for(int i = 0; i < merged.size(); i++){
+        free(merged[i]);
+    }
+    return 0;
+}
 }
